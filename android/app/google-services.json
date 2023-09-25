@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "527200282160",
+    "project_id": "dummyfire-b011a",
+    "storage_bucket": "dummyfire-b011a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527200282160:android:1b0517bdaff3f6715beff5",
+        "android_client_info": {
+          "package_name": "com.example.dummy_fire"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3ckcXEOlt-_4strt2zqiGnVrZh5l3uNg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
