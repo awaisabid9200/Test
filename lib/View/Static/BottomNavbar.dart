@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
-
 import 'Colors.dart';
-
-
 class CustomBottomAppBar extends StatefulWidget {
   @override
   _CustomBottomAppBarState createState() => _CustomBottomAppBarState();
 }
-
 class _CustomBottomAppBarState extends State<CustomBottomAppBar> {
   int _selectedIndex = 0;
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 10,right: 10),
+      padding: const EdgeInsets.only(left: 10,right: 10),
       decoration: BoxDecoration(
         color: Colors.white, // Set the background color to white
         boxShadow: [
@@ -28,7 +22,7 @@ class _CustomBottomAppBarState extends State<CustomBottomAppBar> {
             color: Colors.grey.withOpacity(0.3),
             spreadRadius: 2,
             blurRadius: 7,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -36,7 +30,7 @@ class _CustomBottomAppBarState extends State<CustomBottomAppBar> {
         elevation: 0,
         color: Colors.white,
         height: 60,
-        shape: CircularNotchedRectangle(),
+        shape: const CircularNotchedRectangle(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -55,11 +49,9 @@ class _CustomBottomAppBarState extends State<CustomBottomAppBar> {
       ),
     );
   }
-
   Widget _buildNavItem(int index, String imagePath) {
     final isSelected = index == _selectedIndex;
     final bgColor = isSelected ? AppColors.navcolor : Colors.transparent;
-
     return GestureDetector(
       onTap: () {
         _onItemTapped(index);
@@ -80,7 +72,6 @@ class _CustomBottomAppBarState extends State<CustomBottomAppBar> {
     );
   }
 }
-
 class CustomFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -95,7 +86,7 @@ class CustomFloatingActionButton extends StatelessWidget {
             color: Colors.grey.withOpacity(0.3),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),

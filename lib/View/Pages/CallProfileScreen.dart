@@ -1,18 +1,14 @@
-
 import 'package:flutter/material.dart';
 import '../Static/Colors.dart';
 import '../Static/ImageLogo.dart';
 import '../Widgets/CustomButton3.dart';
 import '../Widgets/CustomHomeImages.dart';
 import '../Widgets/CustomHomeText.dart';
-
 class CallProfile extends StatefulWidget {
   const CallProfile({super.key});
-
   @override
   State<CallProfile> createState() => _ProfileCallState();
 }
-
 class _ProfileCallState extends State<CallProfile> {
   @override
   Widget build(BuildContext context) {
@@ -21,9 +17,9 @@ class _ProfileCallState extends State<CallProfile> {
         child: Stack(
           children: [
             Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               width: double.infinity,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -37,14 +33,19 @@ class _ProfileCallState extends State<CallProfile> {
                 children: [
                   Row(
                     children: [
-                      CustomImage(
-                        image: 'assets/icons/back.png',
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.pop(context);
+                        },
+                        child: CustomImage(
+                          image: 'assets/icons/back.png',
+                        ),
                       ),
                       Expanded(
                         flex: 2,
                         child: Container(
                           alignment: Alignment.center,
-                          margin: EdgeInsets.only(right: 50),
+                          margin: const EdgeInsets.only(right: 50),
                           child: HomePageText(
                               text: 'Profile',
                               fontSize: 16,
@@ -54,7 +55,7 @@ class _ProfileCallState extends State<CallProfile> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   CustomCircularImage(
@@ -62,7 +63,7 @@ class _ProfileCallState extends State<CallProfile> {
                       size: 96,
                       borderColor: AppColors.inputBorder,
                       borderWidth: 1),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   HomePageText(
@@ -70,7 +71,7 @@ class _ProfileCallState extends State<CallProfile> {
                       fontSize: 14,
                       textColor: AppColors.inputBorder,
                       fontWeight: FontWeight.w400),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Row(
@@ -82,10 +83,10 @@ class _ProfileCallState extends State<CallProfile> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: AppColors.navcolor),
-                        child: Icon(Icons.message_outlined,
+                        child: const Icon(Icons.message_outlined,
                             size: 20, color: Colors.white),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       Container(
@@ -94,7 +95,7 @@ class _ProfileCallState extends State<CallProfile> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: AppColors.navcolor),
-                        child: Icon(Icons.video_camera_back_outlined,
+                        child: const Icon(Icons.video_camera_back_outlined,
                             size: 20, color: Colors.white),
                       ),
                     ],
@@ -108,8 +109,8 @@ class _ProfileCallState extends State<CallProfile> {
                right: 0,
                child: Container(
                     height: MediaQuery.sizeOf(context).height*0.55,
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(20),
+                    decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(15),
                             topRight: Radius.circular(15)),
@@ -128,7 +129,7 @@ class _ProfileCallState extends State<CallProfile> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           HomePageText(
@@ -136,7 +137,7 @@ class _ProfileCallState extends State<CallProfile> {
                               fontSize: 16,
                               textColor: AppColors.inputBorder,
                               fontWeight: FontWeight.w500),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           HomePageText(
@@ -145,7 +146,7 @@ class _ProfileCallState extends State<CallProfile> {
                               fontSize: 14,
                               textColor: AppColors.labelColor,
                               fontWeight: FontWeight.w300),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
@@ -163,7 +164,7 @@ class _ProfileCallState extends State<CallProfile> {
                                   fontWeight: FontWeight.w400),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           // --- horizontal Screen --- //
@@ -173,7 +174,7 @@ class _ProfileCallState extends State<CallProfile> {
                                 height: 153,
                                 width: 277,
                                 margin:
-                                    EdgeInsets.only(top: 40, left: 5, bottom: 10),
+                                    const EdgeInsets.only(top: 40, left: 5, bottom: 10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   color: Colors.white,
@@ -182,7 +183,7 @@ class _ProfileCallState extends State<CallProfile> {
                                       color: Colors.grey.shade300,
                                       blurRadius: 13.0, // soften the shadow
                                       spreadRadius: 0.0, //extend the shadow
-                                      offset: Offset(
+                                      offset: const Offset(
                                         0, // Move to right 5  horizontally
                                         3.0, // Move to bottom 5 Vertically
                                       ),
@@ -200,7 +201,7 @@ class _ProfileCallState extends State<CallProfile> {
                                           textColor: AppColors.inputBorder,
                                           fontWeight: FontWeight.w500),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     HomePageText(
@@ -210,7 +211,7 @@ class _ProfileCallState extends State<CallProfile> {
                                         fontWeight: FontWeight.w400),
                                     Container(
                                       alignment: Alignment.topLeft,
-                                      padding: EdgeInsets.only(left: 10, top: 20),
+                                      padding: const EdgeInsets.only(left: 10, top: 20),
                                       child: HomePageText(
                                           text:
                                               "Gynecologist made a doctor's and\nappointment, it was very nice, good\nattention, sure solution.",
@@ -241,20 +242,20 @@ class _ProfileCallState extends State<CallProfile> {
                                   borderRadius: BorderRadius.circular(360),
                                   color: AppColors.navcolor
                                 ),
-                                child: Icon(Icons.location_on_outlined,size: 16,color: Colors.white,),
+                                child: const Icon(Icons.location_on_outlined,size: 16,color: Colors.white,),
                               ),
-                              SizedBox(width: 10,),
+                              const SizedBox(width: 10,),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   HomePageText(text: 'Medical Center', fontSize: 14, textColor: AppColors.inputBorder, fontWeight: FontWeight.w500),
-                                  SizedBox(height: 10,),
+                                  const SizedBox(height: 10,),
                                   HomePageText(text: '3453 street 20 no Albama, USA', fontSize: 12, textColor: AppColors.labelColor, fontWeight: FontWeight.w400),
                                 ],
                               ),
                             ],
                           ),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -262,7 +263,7 @@ class _ProfileCallState extends State<CallProfile> {
                               CustomButton3(text:'Book Appoinment' ,onPressed: (){},)
                             ],
                           ),
-                          SizedBox(height: 20,)
+                          const SizedBox(height: 20,)
                         ],
                       ),
                     ),

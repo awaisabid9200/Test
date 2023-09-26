@@ -1,8 +1,6 @@
-import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../Service/RegisterServiceBtn.dart';
-import '../../Service/Users.dart';
 import '../Static/Colors.dart';
 import '../Static/ImageLogo.dart';
 import '../Static/TextStyleWidgets.dart';
@@ -12,14 +10,11 @@ import '../Widgets/CustomTextField.dart';
 import '../Widgets/CustomTextLandS.dart';
 import '../Widgets/CustonDivider.dart';
 import '../Widgets/CutomBtnText.dart';
-
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
-
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
-
 class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController usernametextController = TextEditingController();
   TextEditingController emailtextController = TextEditingController();
@@ -28,10 +23,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController confirmpasswordtextController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   User? crrentUser = FirebaseAuth.instance.currentUser;
-
   @override
   Widget build(BuildContext context) {
-
     final registerButton = RegisterBtn(
       usernametextController: usernametextController,
       emailtextController: emailtextController,
@@ -39,7 +32,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       passwordtextController: passwordtextController,
       confirmpasswordtextController: confirmpasswordtextController,
     );
-
     return Scaffold(
       backgroundColor: AppColors.backColor,
       body: SafeArea(
@@ -47,18 +39,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             children: [
               Center(child: LogoImageContainer()),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Text(
+              const Text(
                 'Hey there,',
                 style: AuthTextstyle.smallheadindTextStyle,
               ),
-              Text(
+              const Text(
                 'Create an Account',
                 style: AuthTextstyle.headindTextStyle,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Form(
@@ -71,7 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       images: 'assets/icons/Profile.png',
                       controller: usernametextController,
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value == null || value.isEmpty) {
                           return 'Please enter your first name';
                         }
                         return null; // Return null if the input is valid
@@ -82,7 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       images: 'assets/icons/email.png',
                       controller: emailtextController,
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value == null || value.isEmpty)  {
                           return 'Please enter an email address';
                         } else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$').hasMatch(value)) {
                           return 'Please enter a valid email address';
@@ -95,7 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       images: 'assets/icons/Call.png',
                       controller: phonetextController,
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if(value == null || value.isEmpty)  {
                           return 'Please enter your phone number';
                         } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                           return 'Please enter a valid phone number';
@@ -108,7 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       images: 'assets/icons/Lock.png',
                       controller: passwordtextController,
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value == null || value.isEmpty)  {
                           return 'Please enter a password';
                         } else if (value.length < 6) {
                           return 'Password must be at least 6 characters long';
@@ -121,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       images: 'assets/icons/Lock-1.png',
                       controller: confirmpasswordtextController,
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value == null || value.isEmpty)  {
                           return 'Please confirm your password';
                         } else if (value != passwordtextController.text) {
                           return 'Passwords do not match';
@@ -132,7 +124,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ],
                 ),
               ),
-
               CustomCheckboxWithText(
                 text: 'By continuing you accept our',
                 text1: 'Privacy Policy',
@@ -143,16 +134,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   print('Checkbox value changed: $newValue');
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               CustomButton(
                   text: 'Register',
                   onPressed: (){if (_formKey.currentState!.validate()) {
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   const SnackBar(content: Text('Processing Data...')),
+                    // );
                     registerButton.registerUser();
                   }},
                   //async {
-
                     // var userName = usernametextController.text.trim();
                     // var userPhone = phonetextController.text.trim();
                     // var userEmail = emailtextController.text.trim();
@@ -180,7 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onFacebookPressed: () {},
                   onGooglePressed: () {},
                   onTwitterPressed: () {}),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               CustomTextLandS(
@@ -190,7 +183,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Navigator.pushNamed(context,'Register');
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               )
             ],

@@ -1,27 +1,20 @@
+import 'package:dummy_fire/View/Pages/LoginScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import '../Static/Colors.dart';
 import '../Static/ImageLogo.dart';
 import 'package:flutter/material.dart';
 import '../Static/TextStyleWidgets.dart';
-import '../Widgets/CustomSocialIcons.dart';
 import '../Widgets/CustomTextField.dart';
-import '../Widgets/CustomTextLandS.dart';
 import '../Widgets/CustomverifyText.dart';
-import '../Widgets/CustonDivider.dart';
 import '../Widgets/CutomBtnText.dart';
-import '../Widgets/CutomBtnTextIcon.dart';
-import '../Widgets/TextWithUnderLine.dart';
-
-class CreatePassword extends StatefulWidget {
-  const CreatePassword({super.key});
-
+class EmailVerify extends StatefulWidget {
+  const EmailVerify({super.key});
   @override
-  State<CreatePassword> createState() => _RegisterScreenState();
+  State<EmailVerify> createState() => _RegisterScreenState();
 }
-
-class _RegisterScreenState extends State<CreatePassword> {
-  TextEditingController passwordtextController = TextEditingController();
-  TextEditingController confirmpasswordtextController = TextEditingController();
-
+class _RegisterScreenState extends State<EmailVerify> {
+  TextEditingController emailtextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +26,7 @@ class _RegisterScreenState extends State<CreatePassword> {
               children: [
                 Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     Expanded(
@@ -47,36 +40,42 @@ class _RegisterScreenState extends State<CreatePassword> {
                             child: LogoImageContainer())),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'Create\n New Password',
+                const Text(
+                  'Welcome Back',
                   style: AuthTextstyle.headindTextStyle,
-                  textAlign: TextAlign.center,
                 ),
                 CustomTextVerify(
                     text:
-                        'Please Enter New Password'),
-                SizedBox(
+                        'Please enter  your email  address\n You will receive a link to create a\n new password via email.'),
+                const SizedBox(
                   height: 20,
                 ),
                 CustomInputField(
-                  labelText: 'Password',
-                  images: 'assets/icons/Lock.png',
-                  controller: passwordtextController,
+                  labelText: 'Email',
+                  images: 'assets/icons/email.png',
+                  controller: emailtextController,
                 ),
-                CustomInputField(
-                  labelText: 'ConfirmPassword',
-                  images: 'assets/icons/Lock-1.png',
-                  controller: confirmpasswordtextController,
-                ),
-                SizedBox(
+                const SizedBox(
                   height: 60,
                 ),
                 CustomButton(
-                  onPressed: () {},
-                  text: 'Change Password',
+                  onPressed: () {
+                    var forgotEmail = emailtextController.text.trim();
+                    try {
+                      FirebaseAuth.instance
+                          .sendPasswordResetEmail(email: forgotEmail)
+                          .then((value) => {
+                                Get.off(() => const LoginScreen()),
+                                Get.snackbar('Email', 'OnLink'),
+                              });
+                    } on FirebaseAuthException catch (e) {
+                      print('error$e');
+                    }
+                  },
+                  text: 'Submit',
                 )
               ],
             ),

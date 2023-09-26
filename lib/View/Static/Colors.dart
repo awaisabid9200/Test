@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class AppColors {
   // Define your color constants as static fields
   static const Color backColor = Color(0xffF7F8F8);
@@ -13,5 +12,4 @@ class AppColors {
   static const Color labelColor = Color(0xFFADA4A5);
   static const Color navcolor = Color(0xFFB1AFE9);
 // Add more colors as needed
-
 }

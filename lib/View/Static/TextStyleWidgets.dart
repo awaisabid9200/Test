@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-
-
 // login and signin text Style
-
 class AuthTextstyle{
-
   static const TextStyle smallheadindTextStyle = TextStyle(
     fontSize:14,
     color: Colors.black,
@@ -15,11 +11,9 @@ class AuthTextstyle{
     color: Colors.black,
     fontWeight: FontWeight.w600,
   );
-
   static const TextStyle headindTextStyle = TextStyle(
     fontSize: 24,
     color: Colors.black,
     fontWeight: FontWeight.w700,
   );
-
 }

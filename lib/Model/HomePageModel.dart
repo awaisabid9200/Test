@@ -2,7 +2,6 @@ class ListItem {
   final String text;
   final String text1;
   final String imageUrl;
-
   ListItem({required this.text, required this.imageUrl, required this.text1});
 }
 List<ListItem> itemList = [

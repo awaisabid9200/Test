@@ -45,6 +45,8 @@ dependencies:
   firebase_storage: ^11.2.7
   get: ^4.6.6
   google_sign_in: ^6.1.5
+  hidden_drawer_menu: ^3.0.1
+  font_awesome_flutter: ^10.5.0
 
 dev_dependencies:
   flutter_test:
