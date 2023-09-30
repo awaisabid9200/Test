@@ -2,6 +2,7 @@ import 'package:dummy_fire/View/Pages/HomePage.dart';
 import 'package:dummy_fire/View/Pages/LoginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../Pages/CallProfileScreen.dart';
 import '../Pages/EditProfile.dart';
 import '../Pages/ProfileScreen.dart';
@@ -253,6 +254,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
       ),
     );
   }
+
   void _showLogoutConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -269,16 +271,32 @@ class _DrawerMenuState extends State<DrawerMenu> {
             ),
             TextButton(
               onPressed: () async {
-                await FirebaseAuth.instance.signOut();
                 Navigator.of(context).pop(); // Dismiss the dialog
-                // Navigate to the login screen or perform any other action
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+
+                // Show loading indicator
+                EasyLoading.show(status: 'Logging out...');
+
+                // Perform the logout operation
+                try {
+                  await FirebaseAuth.instance.signOut();
+                  // Navigate to the login screen or perform any other action
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  );
+                } catch (e) {
+                  // Handle any errors that may occur during logout
+                  print('Error logging out: $e');
+                } finally {
+                  // Dismiss the loading indicator when done
+                  EasyLoading.dismiss();
+                }
               },
-              child: const Text('Logout'),
+              child: const Text('Yes'),
             ),
           ],
         );
       },
     );
   }
-}
+  }

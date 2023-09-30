@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import '../Static/Colors.dart';
-class CustomInputField extends StatelessWidget {
+
+class CustomInputField extends StatefulWidget {
   final String labelText;
   final String images;
   final TextEditingController controller;
   final String? Function(String?)? validator;
+  final TextInputType keyboardType; // Add a keyboardType parameter
+
   CustomInputField({
     required this.labelText,
     required this.images,
     required this.controller,
     this.validator,
+    this.keyboardType = TextInputType.text, // Default to TextInputType.text
   });
+
+  @override
+  _CustomInputFieldState createState() => _CustomInputFieldState();
+}
+
+class _CustomInputFieldState extends State<CustomInputField> {
+  bool hasError = false;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -18,31 +30,46 @@ class CustomInputField extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(10),
-            child: SizedBox(
-              height: 48,
-              width: 315,
-              child: TextFormField(
-                cursorColor: Colors.black,
-                controller: controller,
-                validator: validator,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        width: 1, color: AppColors.inputBorder), //<-- SEE HERE
-                    borderRadius: BorderRadius.circular(50.0),
+            child: TextFormField(
+              cursorColor: Colors.black,
+              controller: widget.controller,
+              validator: (value) {
+                setState(() {
+                  hasError = widget.validator?.call(value) != null;
+                });
+                return widget.validator?.call(value);
+              },
+              keyboardType: widget.keyboardType, // Use the keyboardType parameter
+              decoration: InputDecoration(
+                contentPadding:
+                EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                prefixIcon: Image.asset(widget.images),
+                hintText: widget.labelText,
+                hintStyle: TextStyle(
+                  color: AppColors.labelColor,
+                  fontSize: 14,
+                ),
+                labelText: widget.labelText,
+                floatingLabelStyle: TextStyle(
+                  color: hasError ? Colors.red : AppColors.inputBorder,
+                ),
+                labelStyle: TextStyle(
+                  color: AppColors.labelColor,
+                  fontSize: 14,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(
+                    color: hasError ? Colors.red : AppColors.inputBorder,
+                    width: 1,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    //<-- SEE HERE
-                    borderSide:
-                        const BorderSide(width: 1, color: AppColors.inputBorder),
-                    borderRadius: BorderRadius.circular(50.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 1,
+                    color: hasError ? Colors.red : AppColors.inputBorder,
                   ),
-                  prefixIcon: Image.asset(images),
-                  hintText: labelText,
-                  hintStyle: const TextStyle(
-                    color: AppColors.labelColor,
-                    fontSize: 14,
-                  ),
+                  borderRadius: BorderRadius.circular(50.0),
                 ),
               ),
             ),

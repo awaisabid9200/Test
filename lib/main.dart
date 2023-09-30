@@ -1,6 +1,8 @@
+import 'package:dummy_fire/View/Pages/PhoneNumber.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 import 'View/Pages/CallProfileScreen.dart';
@@ -39,12 +41,15 @@ class _MyAppState extends State<MyApp> {
       home: user != null ? const HomePage() : const LoginScreen(),
       initialRoute: 'RegisterScreen',
       routes: {
+        'phoneauth':(context)=>PhoneVerify(),
         'login': (context) => LoginScreen(),
+        'HomePage': (context) => HomePage(),
         'register': (context) => RegisterScreen(),
         'Email': (context) => CreatePassword(),
         'forgotpassword': (context) => EmailVerify(),
         'phoneNo': (context) => CallProfile(),
       },
+      builder: EasyLoading.init(),
     );
   }
 }

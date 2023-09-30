@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../Service/RegisterServiceBtn.dart';
+import '../../Service/Validation_method.dart';
 import '../Static/Colors.dart';
 import '../Static/ImageLogo.dart';
 import '../Static/TextStyleWidgets.dart';
@@ -10,11 +11,15 @@ import '../Widgets/CustomTextField.dart';
 import '../Widgets/CustomTextLandS.dart';
 import '../Widgets/CustonDivider.dart';
 import '../Widgets/CutomBtnText.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
+
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
+
 class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController usernametextController = TextEditingController();
   TextEditingController emailtextController = TextEditingController();
@@ -23,6 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController confirmpasswordtextController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   User? crrentUser = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     final registerButton = RegisterBtn(
@@ -55,71 +61,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               Form(
                 key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
+                autovalidateMode: AutovalidateMode.disabled,
                 child: Column(
                   children: [
                     CustomInputField(
                       labelText: 'First Name',
                       images: 'assets/icons/Profile.png',
                       controller: usernametextController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your first name';
-                        }
-                        return null; // Return null if the input is valid
-                      },
+                      validator: FormValidator
+                          .validateFirstName, // Use the validation method
+                      keyboardType: TextInputType.text,
                     ),
                     CustomInputField(
                       labelText: 'Email',
                       images: 'assets/icons/email.png',
                       controller: emailtextController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty)  {
-                          return 'Please enter an email address';
-                        } else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$').hasMatch(value)) {
-                          return 'Please enter a valid email address';
-                        }
-                        return null; // Return null if the input is valid
-                      },
+                      validator: FormValidator
+                          .validateEmail, // Use the validation method
+                      keyboardType: TextInputType.emailAddress,
                     ),
                     CustomInputField(
                       labelText: 'Phone',
                       images: 'assets/icons/Call.png',
                       controller: phonetextController,
-                      validator: (value) {
-                        if(value == null || value.isEmpty)  {
-                          return 'Please enter your phone number';
-                        } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                          return 'Please enter a valid phone number';
-                        }
-                        return null; // Return null if the input is valid
-                      },
+                      validator: FormValidator
+                          .validatePhone, // Use the validation method
+                      keyboardType: TextInputType.phone,
                     ),
                     CustomInputField(
                       labelText: 'Password',
                       images: 'assets/icons/Lock.png',
                       controller: passwordtextController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty)  {
-                          return 'Please enter a password';
-                        } else if (value.length < 6) {
-                          return 'Password must be at least 6 characters long';
-                        }
-                        return null; // Return null if the input is valid
-                      },
+                      validator: FormValidator
+                          .validatePassword, // Use the validation method
                     ),
                     CustomInputField(
                       labelText: 'Confirm Password',
                       images: 'assets/icons/Lock-1.png',
                       controller: confirmpasswordtextController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty)  {
-                          return 'Please confirm your password';
-                        } else if (value != passwordtextController.text) {
-                          return 'Passwords do not match';
-                        }
-                        return null; // Return null if the input is valid
-                      },
+                      validator: (value) =>
+                          FormValidator.validateConfirmPassword(
+                              value,
+                              passwordtextController
+                                  .text), // Use the validation method
                     ),
                   ],
                 ),
@@ -138,34 +122,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 20,
               ),
               CustomButton(
-                  text: 'Register',
-                  onPressed: (){if (_formKey.currentState!.validate()) {
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   const SnackBar(content: Text('Processing Data...')),
-                    // );
+                text: 'Register',
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
                     registerButton.registerUser();
-                  }},
-                  //async {
-                    // var userName = usernametextController.text.trim();
-                    // var userPhone = phonetextController.text.trim();
-                    // var userEmail = emailtextController.text.trim();
-                    // var userPassword = passwordtextController.text.trim();
-                    // var userCPassword =
-                    //     confirmpasswordtextController.text.trim();
-                    //
-                    // await FirebaseAuth.instance
-                    //     .createUserWithEmailAndPassword(
-                    //         email: userEmail, password: userPassword)
-                    //
-                    //     .then((value) => {
-                    //           log("user create"),
-                    //           signUpUser(userName, userEmail, userPhone,
-                    //               userPassword, userCPassword),
-                    //           print('user create'),
-                    //
-                    //         });
-                  //}
-                  ),
+                  }
+                },
+              ),
               TextWithDivider(
                 text: 'or',
               ),
@@ -179,8 +142,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               CustomTextLandS(
                 text1: 'Already have an account?',
                 text2: 'LogIn',
-                onPressed: (){
-                  Navigator.pushNamed(context,'Register');
+                onPressed: () {
+                  Navigator.pushNamed(context, 'login');
                 },
               ),
               const SizedBox(

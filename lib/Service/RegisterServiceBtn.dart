@@ -1,8 +1,11 @@
 import 'dart:developer';
+import 'package:dummy_fire/View/Pages/LoginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'Users.dart';
+import 'signUpUser.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart'; // Import EasyLoading
+
 class RegisterBtn {
   final TextEditingController usernametextController;
   final TextEditingController emailtextController;
@@ -16,6 +19,7 @@ class RegisterBtn {
     required this.passwordtextController,
     required this.confirmpasswordtextController,
   });
+
   Future<void> registerUser() async {
     var userName = usernametextController.text.trim();
     var userPhone = phonetextController.text.trim();
@@ -23,26 +27,25 @@ class RegisterBtn {
     var userPassword = passwordtextController.text.trim();
     var userCPassword = confirmpasswordtextController.text.trim();
     try {
-      // Show a loading SnackBar
-      Get.snackbar(
-        'Creating User...',
-        'Please wait...',
-        showProgressIndicator: true,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.withOpacity(0.8),
-      );
+      // Show loading indicator
+      EasyLoading.show(status: 'Creating User...');
+
       final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: userEmail,
         password: userPassword,
       );
-      // User creation successful, hide the SnackBar
-      Get.back();
+      Get.to(()=>LoginScreen());
+      // Dismiss loading indicator when user creation is successful
+      EasyLoading.dismiss();
+
       log("User created: ${userCredential.user?.email}");
       signUpUser(userName, userEmail, userPhone, userPassword, userCPassword);
       print('User created');
     } catch (error) {
-      // Hide the loading SnackBar and show an error SnackBar
-      Get.back();
+      // Dismiss loading indicator when an error occurs
+      EasyLoading.dismiss();
+
+      // Show an error SnackBar
       Get.snackbar(
         'Error',
         'Failed to create user: $error',
@@ -50,6 +53,7 @@ class RegisterBtn {
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
+
       print('Failed to create user: $error');
     }
   }

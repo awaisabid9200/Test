@@ -1,6 +1,5 @@
-import 'package:dummy_fire/View/Pages/HomePage.dart';
-import 'package:get/get.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import '../../Service/auth_sevices.dart';
+import '../../Service/Validation_method.dart';
 import '../Static/Colors.dart';
 import '../Static/ImageLogo.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +10,6 @@ import '../Widgets/CustomTextLandS.dart';
 import '../Widgets/CustonDivider.dart';
 import '../Widgets/CutomBtnTextIcon.dart';
 import '../Widgets/TextWithUnderLine.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import 'PhoneNumber.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,9 +19,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<LoginScreen> {
+
   TextEditingController emailtextController = TextEditingController();
   TextEditingController passwordtextController = TextEditingController();
-  bool isLoggingIn = false;
+
+  final AuthService _authService = AuthService();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +46,9 @@ class _RegisterScreenState extends State<LoginScreen> {
                             alignment: Alignment.topLeft,
                             child: GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(context, 'register');
+                                  Navigator.pushNamed(context, 'phoneauth');
                                 },
-                                child: Image.asset('assets/icons/back.png')))),
+                                child: Image.asset('assets/icons/call-.png')))),
                     Expanded(
                         flex: 2,
                         child: Align(
@@ -70,164 +70,58 @@ class _RegisterScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                CustomInputField(
-                  labelText: 'Email',
-                  images: 'assets/icons/email.png',
-                  controller: emailtextController,
-                ),
-                CustomInputField(
-                  labelText: 'Password',
-                  images: 'assets/icons/Lock.png',
-                  controller: passwordtextController,
-                ),
-                Container(
-                  width: 315,
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: TextUndeLine(
-                        text: 'Forgot Password?',
-                        onPressed: () {
-                          Navigator.pushNamed(context, 'forgotpassword');
-                        }),
+                Form(
+                  key: _formKey, // Use the _formKey for validation
+                  autovalidateMode: AutovalidateMode.disabled,
+                  child: Column(
+                    children: [
+                      CustomInputField(
+                        labelText: 'Email',
+                        images: 'assets/icons/email.png',
+                        controller: emailtextController,
+                        validator: ValidationService.validateEmail,
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      CustomInputField(
+                        labelText: 'Password',
+                        images: 'assets/icons/Lock.png',
+                        controller: passwordtextController,
+                        validator: ValidationService.validatePassword,
+                      ),
+                      Container(
+                        width: 315,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: TextUndeLine(
+                              text: 'Forgot Password?',
+                              onPressed: () {
+                                Navigator.pushNamed(context, 'forgotpassword');
+                              }),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 150,
+                      ),
+                      CustomButtonIcon(
+                        text: 'Login',
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            final email = emailtextController.text.trim();
+                            final password = passwordtextController.text.trim();
+                            await _authService.signIn(context,email, password);
+                          }
+                        },
+                        image: 'assets/icons/Login.png',
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  height: 150,
-                ),
-                CustomButtonIcon(
-                  text: 'Login',
-                  onPressed: () async {
-                    if (isLoggingIn) {
-                      // Don't proceed if the login process is already in progress.
-                      return;
-                    }
-                    setState(() {
-                      isLoggingIn = true;
-                    });
-                    var loginEmail = emailtextController.text.trim();
-                    var loginPassword = passwordtextController.text.trim();
-                    try {
-                      final UserCredential userCredential = await FirebaseAuth.instance
-                          .signInWithEmailAndPassword(email: loginEmail, password: loginPassword);
-                      final User? firebaseUser = userCredential.user;
-                      if (firebaseUser != null) {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: Row(
-                                children: [
-                                  CircularProgressIndicator(),
-                                  SizedBox(width: 20),
-                                  Text(
-                                    'Loading...',
-                                    style: TextStyle(color: AppColors.inputBorder),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                        Future.delayed(Duration(seconds: 2), () {
-                          Navigator.of(context).pop(); // Close the AlertDialog
-                          Get.to(() => PhoneVerify());
-                        });
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Check email and password'),
-                            duration: Duration(seconds: 3),
-                          ),
-                        );
-                      }
-                    } on FirebaseAuthException catch (e) {
-                      // Display an error Snackbar.
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Error: ${e.message}'),
-                          duration: Duration(seconds: 3),
-                        ),
-                      );
-                    } finally {
-                      setState(() {
-                        isLoggingIn = false;
-                      });
-                    }
-                  },
-                  image: 'assets/icons/Login.png',
-                ),
-                // CustomButtonIcon(
-                //   text: 'Login',
-                //   onPressed: () async {
-                //     if (isLoggingIn) {
-                //       // Don't proceed if the login process is already in progress.
-                //       return;
-                //     }
-                //     setState(() {
-                //       isLoggingIn = true;
-                //     });
-                //     var loginEmail = emailtextController.text.trim();
-                //     var loginPassword = passwordtextController.text.trim();
-                //     try {
-                //       final User? firebaseUser = (await FirebaseAuth.instance
-                //               .signInWithEmailAndPassword(
-                //                   email: loginEmail, password: loginPassword))
-                //           .user;
-                //       if (firebaseUser != null) {
-                //         showDialog(
-                //           context: context,
-                //           barrierDismissible: false,
-                //           builder: (BuildContext context) {
-                //             return SizedBox(
-                //               height: 100,
-                //               width: 200,
-                //               child: AlertDialog(
-                //                 content: Row(
-                //                   children: [
-                //                     CircularProgressIndicator(),
-                //                     SizedBox(width: 20,),
-                //                     Text('Loading...',style: TextStyle(color: AppColors.inputBorder),)
-                //                   ],
-                //                 ),
-                //               ),
-                //             );
-                //           },
-                //         );
-                //         Future.delayed(Duration(seconds: 2), () {
-                //           Navigator.of(context).pop(); // Close the AlertDialog
-                //           Get.to(() => HomePage());
-                //         });
-                //       } else {
-                //         ScaffoldMessenger.of(context).showSnackBar(
-                //           SnackBar(
-                //             content: Text('Check email and password'),
-                //             duration: Duration(seconds: 3),
-                //           ),
-                //         );
-                //       }
-                //     } on FirebaseAuthException catch (e) {
-                //       // Display an error Snackbar.
-                //       ScaffoldMessenger.of(context).showSnackBar(
-                //         SnackBar(
-                //           content: Text('Error: $e'),
-                //           duration: Duration(seconds: 3),
-                //         ),
-                //       );
-                //     } finally {
-                //       setState(() {
-                //         isLoggingIn = false;
-                //       });
-                //     }
-                //   },
-                //   image: 'assets/icons/Login.png',
-                // ),
                 TextWithDivider(
                   text: 'or',
                 ),
                 CustomSocialIcons(
                     onFacebookPressed: () {},
-                    onGooglePressed: () {},
+                    onGooglePressed: () {signInWithGoogle(context, 'HomePage');},
                     onTwitterPressed: () {}),
                 SizedBox(
                   height: 10,

@@ -26,7 +26,7 @@ class TextUndeLine extends StatelessWidget {
           ),
           Container(
             height: 2,
-            width: 100,
+            width: 90,
             color: AppColors.LandSColor,
           ),
         ],

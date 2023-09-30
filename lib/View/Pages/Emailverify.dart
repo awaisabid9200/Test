@@ -1,6 +1,5 @@
-import 'package:dummy_fire/View/Pages/LoginScreen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
+import 'package:dummy_fire/Service/auth_sevices.dart';
+import '../../Service/Validation_method.dart';
 import '../Static/Colors.dart';
 import '../Static/ImageLogo.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +14,8 @@ class EmailVerify extends StatefulWidget {
 }
 class _RegisterScreenState extends State<EmailVerify> {
   TextEditingController emailtextController = TextEditingController();
+  final ForgotPassword _authService = ForgotPassword();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,26 +54,24 @@ class _RegisterScreenState extends State<EmailVerify> {
                 const SizedBox(
                   height: 20,
                 ),
-                CustomInputField(
-                  labelText: 'Email',
-                  images: 'assets/icons/email.png',
-                  controller: emailtextController,
+                Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  child: CustomInputField(
+                    labelText: 'Email',
+                    images: 'assets/icons/email.png',
+                    controller: emailtextController,
+                    validator: ValidationService.validateEmail,
+                  ),
                 ),
                 const SizedBox(
                   height: 60,
                 ),
                 CustomButton(
-                  onPressed: () {
-                    var forgotEmail = emailtextController.text.trim();
-                    try {
-                      FirebaseAuth.instance
-                          .sendPasswordResetEmail(email: forgotEmail)
-                          .then((value) => {
-                                Get.off(() => const LoginScreen()),
-                                Get.snackbar('Email', 'OnLink'),
-                              });
-                    } on FirebaseAuthException catch (e) {
-                      print('error$e');
+                  onPressed: () async{
+                    if (_formKey.currentState!.validate()) {
+                      final email = emailtextController.text.trim();
+                      await _authService.resetPassword(context, email);
                     }
                   },
                   text: 'Submit',
